@@ -18,7 +18,7 @@ void checkCorrectness(unsigned char *input, float *output, int width, int height
     for (int i = 0; i < size; i++) {
         expected = input[i] / 255.0;
         if (output[i] != expected) { 
-            printf("Error Mismatch Values: Expected %.2f but got %.2f\n", i, expected, output[i]);
+            printf("Error Mismatch Values: Expected %.2f but got %.2f\n", expected, output[i]);
             correct = 0; 
         }
     }

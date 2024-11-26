@@ -8,7 +8,8 @@
 
 
 /*
-    Correctness Check: Validate if the computation if the same
+    Correctness Check: Validate if the computation is the same with 
+    the expected output
 */
 void expectedOutput(unsigned char *input, float *output, int width, int height) {
     int size = width * height;
