@@ -5,8 +5,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
-extern void imgCvtGrayIntoFloat(int height, int width, unsigned char *input, float *output);
+/*
+    Correctness Check: Validate if the computation if the same
+*/
+void checkCorrectness(unsigned char *input, float *output, int width, int height) {
+    int size = width * height;
+    int correct = 1;
+    float expected; 
+
+    for (int i = 0; i < size; i++) {
+        expected = input[i] / 255.0;
+        if (output[i] != expected) { 
+            printf("Error Mismatch Values: Expected %.2f but got %.2f\n", i, expected, output[i]);
+            correct = 0; 
+        }
+    }
+
+    if (correct) 
+        printf("Success: All values match the expected output!\n");
+    else 
+        printf("Error: Correctness Check Failed\n");
+}
+
+extern void imgCvtGrayInttoFloat(int height, int width, unsigned char *input, float *output);
 
 int main() {
     int height, width;
@@ -71,7 +94,7 @@ int main() {
 
     for (int i = 0; i < executions; i++) {
         clock_t start_time = clock(); 
-        imgCvtGrayIntoFloat(height, width, input, output);
+        imgCvtGrayInttoFloat(height, width, input, output);
         clock_t end_time = clock();  
 
         total += (double)(end_time - start_time) / CLOCKS_PER_SEC;
@@ -114,7 +137,8 @@ int main() {
         printf("Error: Unable to write output to file.\n");
     }
 
-    printf("\nAverage execution time over %d runs: %.6f seconds\n", executions, average);
+    printf("\nAverage execution time over %d runs: %.9f seconds\n", executions, average);
+    checkCorrectness(input, output, width, height);
 
 
     // Free allocated memory

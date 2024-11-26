@@ -4,9 +4,9 @@ section .data
 section .text
     bits 64
     default rel
-    global imgCvtGrayIntoFloat
+    global imgCvtGrayInttoFloat
 
-imgCvtGrayIntoFloat:
+imgCvtGrayInttoFloat:
     mov r10, rcx      
     imul r10, rdx       ; high * width = total pixels
 
