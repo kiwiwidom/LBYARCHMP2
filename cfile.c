@@ -21,39 +21,49 @@ int main() {
     float *output = (float *)malloc(height * width * sizeof(float));
 
     if (!input || !output) {
-        printf("Error, memory allocation failed.\n");
+        printf("Error: Memory Allocation Failed.\n");
         return 1;
     }
 
     srand(time(NULL));
 
     // Different Random Pixel Values (0-256)
-printf("\nRandomly generated pixel values:\n");
-int pixel_limit = (height > 10 || width > 10) ? 5 : height; 
+    printf("\nRandomly Generated Pixel Values:\n");
+    int pixel_limit = (height > 10 || width > 10) ? 10 : height; 
 
-for (int i = 0; i < height; i++) {
-    for (int j = 0; j < width; j++) {
-        input[i * width + j] = rand() % 256;
-
-        // Print values with float_limit
-        if (i < pixel_limit && j < pixel_limit) {
-            printf("%3d ", input[i * width + j]);
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            input[i * width + j] = rand() % 256;
+            if (i < pixel_limit && j < pixel_limit) {
+                printf("%3d ", input[i * width + j]);
+            }
+        }
+        if (i < pixel_limit) {
+            if (width > pixel_limit) {
+                printf("...");
+            }
+            printf("\n");
         }
     }
 
-    // Print ellipsis for truncated rows
-    if (i < pixel_limit) {
-        if (width > pixel_limit) {
-            printf("...");
-        }
-        printf("\n");
+    // Truncate for Large Images
+    if (height > 10 || width > 10) {
+        printf("(Pixel Values Truncated. See intPixels.txt.)\n");
     }
-}
 
-// Indicate truncation if necessary
-if (height > 10 || width > 10) {
-    printf("... (Remaining rows truncated for display)\n");
-}
+    // For reference, pixel values displayed in .txt file
+    FILE *file1 = fopen("intPixels.txt", "w");
+    if (file1) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                fprintf(file1, "%3d ", input[i * width + j]);
+            }
+            fprintf(file1, "\n");
+        }
+        fclose(file1);
+    } else {
+        printf("Error: Unable to write output to file.\n");
+    }
 
     // Measure execution time over 30 runs
     double total = 0.0; 
@@ -64,7 +74,6 @@ if (height > 10 || width > 10) {
         imgCvtGrayIntoFloat(height, width, input, output);
         clock_t end_time = clock();  
 
-        // Accumulate the elapsed time
         total += (double)(end_time - start_time) / CLOCKS_PER_SEC;
     }
 
@@ -72,7 +81,7 @@ if (height > 10 || width > 10) {
     double average = total / executions;
 
     // Converted Float Pixel Values
-    printf("\nConverted float pixel values:\n");
+    printf("\nSingle Float Pixel Values:\n");
     if (height <= 10 && width <= 10) {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -81,28 +90,26 @@ if (height > 10 || width > 10) {
             printf("\n");
         }
     } else {
-        // Print a sample of the first 5 rows and columns for larger images
-        int float_limit = 5;
+        int float_limit = 10;
         for (int i = 0; i < float_limit; i++) {
             for (int j = 0; j < float_limit; j++) {
                 printf("%.2f ", output[i * width + j]);
             }
             printf("...\n");
         }
-        printf("(Output truncated for larger images. Full output written to file.)\n");
+        printf("(Output truncated for larger images. See cvtFloat.txt.)\n");
     }
 
-    // Write full output to file for larger images
-    FILE *file = fopen("cvtFloat.txt", "w");
-    if (file) {
+    // For reference, full output for the converted pixel values
+    FILE *file2 = fopen("cvtFloat.txt", "w");
+    if (file2) {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                fprintf(file, "%.2f ", output[i * width + j]);
+                fprintf(file2, "%.2f ", output[i * width + j]);
             }
-            fprintf(file, "\n");
+            fprintf(file2, "\n");
         }
-        fclose(file);
-        printf("\nFull output written to 'cvtFloat.txt'.\n");
+        fclose(file2);
     } else {
         printf("Error: Unable to write output to file.\n");
     }
