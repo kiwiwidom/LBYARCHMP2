@@ -75,7 +75,11 @@ $i$: Integer representation of the pixel.
 # 1000 x 1000 Image
 ![image](https://github.com/user-attachments/assets/270f2199-11ef-4804-a9ab-d283a480de47)
 
+| Image Size | Execution Time (avg of 30 runs) |
+|------------|---------------------------------|
+| 10x10 | 0.000000000 seconds |
+| 100x100 | 0.000033333 seconds |
+| 1000x1000 | 0.003400000 seconds |
 
-Short Analysis:
-The program achieves excellent performance for the given task, particularly in its ability to handle large data efficiently. It evaluates its execution time over 30 runs, highlighting its speed and scalability. For small images, such as a 10x10 grid, the execution time is negligible, clocking in at approximately 0.000000000 seconds. When the image size increases to 100x100 pixels, the time remains minimal at 0.000033333 seconds. The real test comes with a significantly larger image of 1000x1000 pixels, which contains over a million values to process. Despite this, the program completes the task in just 0.0034 seconds. These results showcase the program’s efficiency and its ability to process substantial amounts of data while maintaining consistent performance.
+The program achieves excellent performance for the given task, particularly in its ability to handle large data efficiently. It evaluates its execution time over 30 runs, highlighting its speed and scalability. For small images, such as a 10x10 grid, the execution time is at approximately 0.000000000 seconds. When the image size increases to 100x100 pixels, the time remains minimal at 0.000033333 seconds. The real test comes with a significantly larger image of 1000x1000 pixels, which contains over a million values to process. Despite this, the program completes the task in just 0.0034 seconds. These results showcase the program’s efficiency and its ability to process substantial amounts of data while maintaining consistent performance.
 
