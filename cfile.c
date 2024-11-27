@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
 /*
     Correctness Check: Validate if the computation if the same
@@ -13,7 +17,7 @@
 void checkCorrectness(unsigned char *input, float *output, int width, int height) {
     int size = width * height;
     int correct = 1;
-    float expected; 
+    float expected;
 
     for (int i = 0; i < size; i++) {
         expected = input[i] / 255.0;
@@ -32,7 +36,7 @@ void checkCorrectness(unsigned char *input, float *output, int width, int height
 extern void imgCvtGrayInttoFloat(int height, int width, unsigned char *input, float *output);
 
 int main() {
-    int height, width;
+    int height, width, choice;
 
     // User input Height and Width
     // Get the execution time for 10 * 10, 100 * 100, and 1000 * 1000
@@ -48,45 +52,68 @@ int main() {
         return 1;
     }
 
-    srand(time(NULL));
+    printf("\nChoose input method:\n");
+    printf("[1] Manual Input\n");
+    printf("[2] Randomly Generated Values\n");
+    printf("Input choice: ");
+    scanf("%d", &choice);
 
-    // Different Random Pixel Values (0-256)
-    printf("\nRandomly Generated Pixel Values:\n");
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            input[i * width + j] = rand() % 256;
-            if (height >= 10 || width >= 10) { // Truncate only for large dimensions
-                if (i < 10 && j < 10) {
-                    printf("%3d ", input[i * width + j]);
-                } else if (i < 10 && j == 10) {
-                    printf("...");
+    switch (choice) {
+        case 1:
+            // Manual Input of Pixel Values
+            printf("\nEnter the pixel values (space-separated):\n");
+            for (int i = 0; i < height * width; i++) {
+                scanf("%hhu", &input[i]); 
+            }
+            break;
+
+        case 2:
+            // Different Random Pixel Values (0-256)
+            srand(time(NULL));
+            printf("\nRandomly Generated Pixel Values:\n");
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    input[i * width + j] = rand() % 256;
+                    if (height >= 10 || width >= 10) { // Truncate only for large dimensions
+                        if (i < 10 && j < 10) {
+                            printf("%3d ", input[i * width + j]);
+                        } else if (i < 10 && j == 10) {
+                            printf("...");
+                        }
+                    } else { // For small dimensions, display all values
+                        printf("%3d ", input[i * width + j]);
+                    }
                 }
-            } else { // For small dimensions, display all values
-                printf("%3d ", input[i * width + j]);
+                if (i < 10 || height < 10) {
+                    printf("\n");
+                }
             }
-        }
-        if (i < 10 || height < 10) {
-            printf("\n");
-        }
-    }
 
-    // For truncation message
-    if (height > 10 || width > 10) {
-        printf("...(Pixel Values Truncated. See intPixels.txt.)\n");
-    }
-
-    // For reference, pixel values displayed in .txt file
-    FILE *file1 = fopen("intPixels.txt", "w");
-    if (file1) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                fprintf(file1, "%3d ", input[i * width + j]);
+            // For truncation message
+            if (height > 10 || width > 10) {
+                printf("...(Pixel Values Truncated. See intPixels.txt.)\n");
             }
-            fprintf(file1, "\n");
-        }
-        fclose(file1);
-    } else {
-        printf("Error: Unable to write output to file.\n");
+
+            // For reference, pixel values displayed in .txt file
+            FILE *file1 = fopen("intPixels.txt", "w");
+            if (file1) {
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
+                        fprintf(file1, "%3d ", input[i * width + j]);
+                    }
+                    fprintf(file1, "\n");
+                }
+                fclose(file1);
+            } else {
+                printf("Error: Unable to write output to file.\n");
+            }
+            break;
+
+        default:
+            printf("Invalid choice. Exiting.\n");
+            free(input);
+            free(output);
+            return 1;
     }
 
     // Measure execution time over 30 runs
@@ -127,7 +154,6 @@ int main() {
         printf("...(Output truncated. See cvtFloat.txt)\n");
     }
 
-
     // For reference, full output for the converted pixel values
     FILE *file2 = fopen("cvtFloat.txt", "w");
     if (file2) {
@@ -144,7 +170,6 @@ int main() {
 
     printf("\nAverage execution time over %d runs: %.9f seconds\n", executions, average);
     checkCorrectness(input, output, width, height);
-
 
     // Free allocated memory
     free(input);
