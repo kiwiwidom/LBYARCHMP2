@@ -6,10 +6,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
 
 /*
     Correctness Check: Validate if the computation if the same
