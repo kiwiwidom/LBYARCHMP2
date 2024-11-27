@@ -52,26 +52,27 @@ int main() {
 
     // Different Random Pixel Values (0-256)
     printf("\nRandomly Generated Pixel Values:\n");
-    int pixel_limit = (height > 10 || width > 10) ? 10 : height; 
-
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             input[i * width + j] = rand() % 256;
-            if (i < pixel_limit && j < pixel_limit) {
+            if (height >= 10 || width >= 10) { // Truncate only for large dimensions
+                if (i < 10 && j < 10) {
+                    printf("%3d ", input[i * width + j]);
+                } else if (i < 10 && j == 10) {
+                    printf("...");
+                }
+            } else { // For small dimensions, display all values
                 printf("%3d ", input[i * width + j]);
             }
         }
-        if (i < pixel_limit) {
-            if (width > pixel_limit) {
-                printf("...");
-            }
+        if (i < 10 || height < 10) {
             printf("\n");
         }
     }
 
-    // Truncate for Large Images
+    // For truncation message
     if (height > 10 || width > 10) {
-        printf("(Pixel Values Truncated. See intPixels.txt.)\n");
+        printf("...(Pixel Values Truncated. See intPixels.txt.)\n");
     }
 
     // For reference, pixel values displayed in .txt file
@@ -105,23 +106,27 @@ int main() {
 
     // Converted Float Pixel Values
     printf("\nSingle Float Pixel Values:\n");
-    if (height <= 10 && width <= 10) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            if (height >= 10 || width >= 10) {
+                if (i < 10 && j < 10) {
+                    printf("%.2f ", output[i * width + j]);
+                } else if (i < 10 && j == 10) {
+                    printf("...");
+                }
+            } else {
                 printf("%.2f ", output[i * width + j]);
             }
+        }
+        if (i < 10 || height < 10) {
             printf("\n");
         }
-    } else {
-        int float_limit = 10;
-        for (int i = 0; i < float_limit; i++) {
-            for (int j = 0; j < float_limit; j++) {
-                printf("%.2f ", output[i * width + j]);
-            }
-            printf("...\n");
-        }
-        printf("(Output truncated for larger images. See cvtFloat.txt.)\n");
     }
+
+    if (height > 10 || width > 10) {
+        printf("...(Output truncated. See cvtFloat.txt)\n");
+    }
+
 
     // For reference, full output for the converted pixel values
     FILE *file2 = fopen("cvtFloat.txt", "w");
